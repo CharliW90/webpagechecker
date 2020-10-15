@@ -25,7 +25,7 @@ while True:
 
         else:
 
-            logger.info("webpage-change-detected")
+            print("webpage-change-detected")
             msg = EmailMessage()
             msg.set_content(url)
             msg['From'] = 'arcadius.webster@googlemail.com'
@@ -46,11 +46,12 @@ while True:
 
     except Exception as e:
 
+        print(e)
         msg = EmailMessage()
         msg.set_content(url)
         msg['From'] = 'arcadius.webster@googlemail.com'
         msg['To'] = 'acey.williams@googlemail.com'
-        msg['Subject'] = 'York Ghost Merchants Shop: NETWORK FAILURE'
+        msg['Subject'] = 'York Ghost Merchants Shop: NETWORK FAILURE' + e
         fromaddr = 'arcadius.webster@googlemail.com'
         toaddrs = ['acey.williams@googlemail.com']
         server = smtplib.SMTP('smtp.gmail.com', 587)
