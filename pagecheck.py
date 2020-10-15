@@ -5,7 +5,7 @@ from email.message import EmailMessage
 import hashlib
 from urllib.request import urlopen
 
-url = os.environ['pagetocheck']
+url = os.environ.get("pagetocheck")
 response = urlopen(url).read()
 currentHash = hashlib.sha224(response).hexdigest()
 
@@ -34,7 +34,7 @@ while True:
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', os.environ['gmailpassword'])
+            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
             response = urlopen(url).read()
@@ -54,6 +54,6 @@ while True:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login('arcadius.webster@googlemail.com', os.environ['gmailpassword'])
+        server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
         server.send_message(msg)
         server.quit()
