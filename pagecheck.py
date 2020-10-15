@@ -25,6 +25,7 @@ while True:
 
         else:
 
+            logger.info("webpage-change-detected")
             msg = EmailMessage()
             msg.set_content(url)
             msg['From'] = 'arcadius.webster@googlemail.com'
@@ -38,7 +39,6 @@ while True:
             server.login('arcadius.webster@googlemail.com', '1926ArcadiusWebster5328')
             server.send_message(msg)
             server.quit()
-            print("change-detected")
             response = urlopen(url).read()
             currentHash = hashlib.sha224(response).hexdigest()
             time.sleep(30)
