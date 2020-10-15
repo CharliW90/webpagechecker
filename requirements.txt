@@ -1,4 +1,3 @@
 requests
-email.message
 hashlib
 urllib.request
