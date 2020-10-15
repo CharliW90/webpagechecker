@@ -1,4 +1,4 @@
 requests
-from email.message import EmailMessage
+email.message
 hashlib
-from urllib.request import urlopen
+urllib.request
