@@ -38,6 +38,7 @@ while True:
             server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
+            print("change-detected")
             response = urlopen(url).read()
             currentHash = hashlib.sha224(response).hexdigest()
             time.sleep(30)
