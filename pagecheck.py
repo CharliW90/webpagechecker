@@ -15,6 +15,7 @@ while True:
 
         response = urlopen(url).read()
         currentHash = hashlib.sha224(response).hexdigest()
+        time.sleep(30)
         response = urlopen(url).read()
         newHash = hashlib.sha224(response).hexdigest()
 
@@ -38,6 +39,7 @@ while True:
             server.quit()
             response = urlopen(url).read()
             currentHash = hashlib.sha224(response).hexdigest()
+            time.sleep(30)
             continue
 
     except Exception as e:
