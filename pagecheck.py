@@ -36,7 +36,7 @@ while True:
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', '1926ArcadiusWebster5328')
+            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
             response = urlopen(url).read()
