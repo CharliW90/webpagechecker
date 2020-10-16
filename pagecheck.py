@@ -16,7 +16,7 @@ snapshot = str(shop)
 currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 print("successfully hashed snapshot of shop")
 print("Hash: " + currentHash)
-print(datetime.now(gmt))
+print(datetime.now(utc).strftime("%Y-%m-%d %H:%M:%S"))
         
 while True:
 
@@ -39,7 +39,7 @@ while True:
 
         else:
 
-            logdate = str(datetime.now())
+            logdate = str(datetime.now(utc).strftime("%Y-%m-%d %H:%M:%S"))
             prefix = str("York Ghost Merchants Shop: Change Detected -")
             header = prefix + " " + logdate
             print(header)
@@ -69,7 +69,7 @@ while True:
     except Exception as e:
 
         print(e)
-        logdate = str(datetime.now())
+        logdate = str(datetime.now(utc).strftime("%Y-%m-%d %H:%M:%S"))
         prefix = str("York Ghost Merchants Shop: Error -")
         errormsg = str(e)
         header = prefix + " " + errormsg + " " + logdate
