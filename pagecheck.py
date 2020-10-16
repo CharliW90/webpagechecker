@@ -18,6 +18,7 @@ currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 print("successfully hashed snapshot of shop")
 print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+errorcount = 0
         
 while True:
 
@@ -41,8 +42,8 @@ while True:
         else:
 
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str("York Ghost Merchants Shop: Change Detected -")
-            header = prefix + " " + logdate
+            prefix = str("York Ghost Merchants Shop: Change Detected - ")
+            header = prefix + logdate
             print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
@@ -70,20 +71,42 @@ while True:
     except Exception as e:
 
         print(e)
-        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-        prefix = str("York Ghost Merchants Shop: Error -")
-        errormsg = str(e)
-        header = prefix + " " + errormsg + " " + logdate
-        msg = EmailMessage()
-        msg.set_content(url)
-        msg['From'] = 'arcadius.webster@googlemail.com'
-        msg['To'] = 'acey.williams@googlemail.com'
-        msg['Subject'] = str(header)
-        fromaddr = 'arcadius.webster@googlemail.com'
-        toaddrs = ['acey.williams@googlemail.com']
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
-        server.send_message(msg)
-        server.quit()
+        errorcount +=1
+        if errorcount < 10:
+            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+            prefix = str("York Ghost Merchants Shop: Error - ")
+            errormsg = str(e)
+            header = prefix + errormsg + " - " + logdate
+            msg = EmailMessage()
+            msg.set_content(errormsg)
+            msg['From'] = 'arcadius.webster@googlemail.com'
+            msg['To'] = 'acey.williams@googlemail.com'
+            msg['Subject'] = str(header)
+            fromaddr = 'arcadius.webster@googlemail.com'
+            toaddrs = ['acey.williams@googlemail.com']
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.send_message(msg)
+            server.quit()
+            continue
+        else:
+            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+            prefix = str("York Ghost Merchants Shop: Final Error - ")
+            suffix = str(": APP OFFLINE")
+            errormsg = str(e)
+            header = prefix + errormsg + suffix + " - " + logdate 
+            msg = EmailMessage()
+            msg.set_content(errormsg)
+            msg['From'] = 'arcadius.webster@googlemail.com'
+            msg['To'] = 'acey.williams@googlemail.com'
+            msg['Subject'] = str(header)
+            fromaddr = 'arcadius.webster@googlemail.com'
+            toaddrs = ['acey.williams@googlemail.com']
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.send_message(msg)
+            server.quit()
