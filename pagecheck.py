@@ -10,7 +10,7 @@ from requests_html import HTMLSession
 url = os.environ.get("pagetocheck")
 session = HTMLSession()
 response = session.get(url)
-shop = response.html.xpath(/html/body/div[1]/main/article/section[2]/div[2]/div/section/div[2])
+shop = response.html.xpath(//*[@id="sections"]/section[2]/div[2]/div/section/div[2])
 print(shop)
 currentHash = hashlib.sha224(shop).hexdigest() 
 
@@ -20,11 +20,11 @@ while True:
 
         session = HTMLSession()
         response = session.get(url)
-        shop = response.html.xpath(/html/body/div[1]/main/article/section[2]/div[2]/div/section/div[2])
+        shop = response.html.xpath(//*[@id="sections"]/section[2]/div[2]/div/section/div[2])
         print(shop)
         currentHash = hashlib.sha224(shop).hexdigest()
         time.sleep(30)
-        shop = response.html.xpath(/html/body/div[1]/main/article/section[2]/div[2]/div/section/div[2])
+        shop = response.html.xpath(//*[@id="sections"]/section[2]/div[2]/div/section/div[2])
         newHash = hashlib.sha224(shop).hexdigest()
 
         if newHash == currentHash:
