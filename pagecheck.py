@@ -7,6 +7,7 @@ import hashlib
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
+from datetime import timedelta
 
 url = os.environ.get("pagetocheck")
 response = urlopen(url)
