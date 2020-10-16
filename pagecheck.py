@@ -65,11 +65,15 @@ while True:
     except Exception as e:
 
         print(e)
+        logdate = str(datetime.datetime.now())
+        prefix = str("York Ghost Merchants Shop: Error -")
+        errormsg = str(e)
+        header = prefix + " " + errormsg + " " + logdate
         msg = EmailMessage()
         msg.set_content(url)
         msg['From'] = 'arcadius.webster@googlemail.com'
         msg['To'] = 'acey.williams@googlemail.com'
-        msg['Subject'] = str("York Ghost Merchants Shop: Error - " + e + " - " + datetime.datetime.now())
+        msg['Subject'] = str(header)
         fromaddr = 'arcadius.webster@googlemail.com'
         toaddrs = ['acey.williams@googlemail.com']
         server = smtplib.SMTP('smtp.gmail.com', 587)
