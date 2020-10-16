@@ -5,65 +5,20 @@ import smtplib
 from email.message import EmailMessage
 import hashlib
 from urllib.request import urlopen
-from requests_html import HTMLSession
+from bs4 import BeautifulSoup
 
 url = os.environ.get("pagetocheck")
-session = HTMLSession()
-response = session.get(url)
-shop = response.html.xpath('/*[@id="sections"]/section[2]/div[2]/div/section/div[2]')
-print(shop)
-currentHash = hashlib.sha224(shop).hexdigest() 
 
-while True:
+# Connect to the website and return the html to the variable ‘page’
+try:
+    page = urlopen(url)
+except:
+    print("Error opening the URL")
 
-    try:
+# parse the html using beautiful soup and store in variable `soup`
+soup = BeautifulSoup(page, 'html.parser')
 
-        session = HTMLSession()
-        response = session.get(url)
-        shop = response.html.xpath('/*[@id="sections"]/section[2]/div[2]/div/section/div[2]')
-        print(shop)
-        currentHash = hashlib.sha224(shop).hexdigest()
-        time.sleep(30)
-        shop = response.html.xpath('/*[@id="sections"]/section[2]/div[2]/div/section/div[2]')
-        newHash = hashlib.sha224(shop).hexdigest()
+# Take out the <div> of name and get its value
+content = soup.find('div', {"class": "products-flex-container"})
 
-        if newHash == currentHash:
-            continue
-
-        else:
-
-            print("webpage-change-detected")
-            msg = EmailMessage()
-            msg.set_content(url)
-            msg['From'] = 'arcadius.webster@googlemail.com'
-            msg['To'] = 'acey.williams@googlemail.com'
-            msg['Subject'] = 'York Ghost Merchants Shop: Change Detected'
-            fromaddr = 'arcadius.webster@googlemail.com'
-            toaddrs = ['acey.williams@googlemail.com']
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
-            server.send_message(msg)
-            server.quit()
-            response = urlopen(url).read()
-            currentHash = hashlib.sha224(response).hexdigest()
-            time.sleep(30)
-            continue
-
-    except Exception as e:
-
-        print(e)
-        msg = EmailMessage()
-        msg.set_content(url)
-        msg['From'] = 'arcadius.webster@googlemail.com'
-        msg['To'] = 'acey.williams@googlemail.com'
-        msg['Subject'] = 'York Ghost Merchants Shop: NETWORK FAILURE' + e
-        fromaddr = 'arcadius.webster@googlemail.com'
-        toaddrs = ['acey.williams@googlemail.com']
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
-        server.send_message(msg)
-        server.quit()
+print(content)
