@@ -38,7 +38,7 @@ while True:
 
         else:
 
-            logdate = str(datetime.datetime.now())
+            logdate = str(datetime.now())
             prefix = str("York Ghost Merchants Shop: Change Detected -")
             header = prefix + " " + logdate
             print(header)
@@ -68,7 +68,7 @@ while True:
     except Exception as e:
 
         print(e)
-        logdate = str(datetime.datetime.now())
+        logdate = str(datetime.now())
         prefix = str("York Ghost Merchants Shop: Error -")
         errormsg = str(e)
         header = prefix + " " + errormsg + " " + logdate
