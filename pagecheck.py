@@ -38,14 +38,17 @@ while True:
 
         else:
 
-            print("webpage-change-detected")
+            logdate = str(datetime.datetime.now())
+            prefix = str("York Ghost Merchants Shop: Change Detected -")
+            header = prefix + " " + logdate
+            print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
        #     msg = EmailMessage()
        #     msg.set_content(url)
        #     msg['From'] = 'arcadius.webster@googlemail.com'
        #     msg['To'] = 'acey.williams@googlemail.com'
-       #     msg['Subject'] = str("York Ghost Merchants Shop: Change Detected - " + datetime.datetime.now())
+       #     msg['Subject'] = str(header)
        #     fromaddr = 'arcadius.webster@googlemail.com'
        #     toaddrs = ['acey.williams@googlemail.com']
        #     server = smtplib.SMTP('smtp.gmail.com', 587)
