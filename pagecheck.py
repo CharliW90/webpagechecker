@@ -74,11 +74,11 @@ while True:
         errorcount +=1
         if errorcount < 10:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str("York Ghost Merchants Shop: Error #" + errorcount + " - ")
+            prefix = str("York Ghost Merchants Shop: Error #" + errorcount)
             errormsg = str(e)
             header = prefix + errormsg + " - " + logdate
             msg = EmailMessage()
-            msg.set_content(errormsg)
+            msg.set_content(errormsg + " -- " + responsedata.text)
             msg['From'] = 'arcadius.webster@googlemail.com'
             msg['To'] = 'acey.williams@googlemail.com'
             msg['Subject'] = str(header)
@@ -99,7 +99,7 @@ while True:
             errormsg = str(e)
             header = prefix + errormsg + suffix + " - " + logdate 
             msg = EmailMessage()
-            msg.set_content(errormsg)
+            msg.set_content(errormsg + "--" + responsedata.text)
             msg['From'] = 'arcadius.webster@googlemail.com'
             msg['To'] = 'acey.williams@googlemail.com'
             msg['Subject'] = str(header)
