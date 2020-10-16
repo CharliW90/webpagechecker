@@ -29,7 +29,7 @@ while True:
         shop = page.find('div', {"class": "products-flex-container"})
         snapshot = str(shop)
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-        time.sleep(30)
+        time.sleep(60)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": "products-flex-container"})
@@ -65,7 +65,7 @@ while True:
             shop = page.find('div', {"class": "products-flex-container"})
             snapshot = str(shop)
             currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-            time.sleep(30)
+            time.sleep(60)
             continue
 
     except Exception as e:
@@ -74,7 +74,7 @@ while True:
         errorcount +=1
         if errorcount < 10:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str("York Ghost Merchants Shop: Error - ")
+            prefix = str("York Ghost Merchants Shop: Error #" + errorcount + " - ")
             errormsg = str(e)
             header = prefix + errormsg + " - " + logdate
             msg = EmailMessage()
@@ -90,6 +90,7 @@ while True:
             server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
+            time.sleep(60)
             continue
         else:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
