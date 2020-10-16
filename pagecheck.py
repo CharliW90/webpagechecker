@@ -6,6 +6,7 @@ from email.message import EmailMessage
 import hashlib
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 url = os.environ.get("pagetocheck")
 response = urlopen(url)
@@ -38,11 +39,13 @@ while True:
         else:
 
             print("webpage-change-detected")
+            print("currentHash: " + currentHash)
+            print("newHash: " + newHash)
             msg = EmailMessage()
             msg.set_content(url)
             msg['From'] = 'arcadius.webster@googlemail.com'
             msg['To'] = 'acey.williams@googlemail.com'
-            msg['Subject'] = 'York Ghost Merchants Shop: Change Detected'
+            msg['Subject'] = str("York Ghost Merchants Shop: Change Detected - " + datetime.datetime.now())
             fromaddr = 'arcadius.webster@googlemail.com'
             toaddrs = ['acey.williams@googlemail.com']
             server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -63,7 +66,7 @@ while True:
         msg.set_content(url)
         msg['From'] = 'arcadius.webster@googlemail.com'
         msg['To'] = 'acey.williams@googlemail.com'
-        msg['Subject'] = 'York Ghost Merchants Shop: NETWORK FAILURE' + e
+        msg['Subject'] = str("York Ghost Merchants Shop: Error - " + e + " - " + datetime.datetime.now())
         fromaddr = 'arcadius.webster@googlemail.com'
         toaddrs = ['acey.williams@googlemail.com']
         server = smtplib.SMTP('smtp.gmail.com', 587)
