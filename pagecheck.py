@@ -44,19 +44,19 @@ while True:
             print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
-       #     msg = EmailMessage()
-       #     msg.set_content(url)
-       #     msg['From'] = 'arcadius.webster@googlemail.com'
-       #     msg['To'] = 'acey.williams@googlemail.com'
-       #     msg['Subject'] = str(header)
-       #     fromaddr = 'arcadius.webster@googlemail.com'
-       #     toaddrs = ['acey.williams@googlemail.com']
-       #     server = smtplib.SMTP('smtp.gmail.com', 587)
-       #     server.starttls()
-       #     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-       #     server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
-       #     server.send_message(msg)
-       #     server.quit()
+            msg = EmailMessage()
+            msg.set_content(shop)
+            msg['From'] = 'arcadius.webster@googlemail.com'
+            msg['To'] = 'acey.williams@googlemail.com'
+            msg['Subject'] = str(header)
+            fromaddr = 'arcadius.webster@googlemail.com'
+            toaddrs = ['acey.williams@googlemail.com']
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.send_message(msg)
+            server.quit()
             response = urlopen(url)
             page = BeautifulSoup(response, 'html.parser')
             shop = page.find('div', {"class": "products-flex-container"})
