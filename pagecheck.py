@@ -57,8 +57,11 @@ while True:
        #     server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
        #     server.send_message(msg)
        #     server.quit()
-            response = urlopen(url).read()
-            currentHash = hashlib.sha224(response).hexdigest()
+            response = urlopen(url)
+            page = BeautifulSoup(response, 'html.parser')
+            shop = page.find('div', {"class": "products-flex-container"})
+            snapshot = str(shop)
+            currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
             time.sleep(30)
             continue
 
