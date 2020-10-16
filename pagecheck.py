@@ -11,7 +11,8 @@ url = os.environ.get("pagetocheck")
 response = urlopen(url)
 page = BeautifulSoup(response, 'html.parser')
 shop = page.find('div', {"class": "products-flex-container"})
-currentHash = hashlib.sha224(shop).hexdigest()
+snapshot = str(shop)
+currentHash = hashlib.sha224(snapshot).hexdigest()
         
 while True:
 
@@ -20,12 +21,14 @@ while True:
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": "products-flex-container"})
-        currentHash = hashlib.sha224(shop).hexdigest()
+        snapshot = str(shop)
+        currentHash = hashlib.sha224(snapshot).hexdigest()
         time.sleep(30)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": "products-flex-container"})
-        newHash = hashlib.sha224(shop).hexdigest()
+        snapshot = str(shop)
+        newHash = hashlib.sha224(snapshot).hexdigest()
 
         if newHash == currentHash:
             continue
