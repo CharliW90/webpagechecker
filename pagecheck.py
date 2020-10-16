@@ -12,7 +12,7 @@ response = urlopen(url)
 page = BeautifulSoup(response, 'html.parser')
 shop = page.find('div', {"class": "products-flex-container"})
 snapshot = str(shop)
-currentHash = hashlib.sha224(snapshot).hexdigest()
+currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
         
 while True:
 
@@ -22,13 +22,13 @@ while True:
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": "products-flex-container"})
         snapshot = str(shop)
-        currentHash = hashlib.sha224(snapshot).hexdigest()
+        currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
         time.sleep(30)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": "products-flex-container"})
         snapshot = str(shop)
-        newHash = hashlib.sha224(snapshot).hexdigest()
+        newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 
         if newHash == currentHash:
             continue
