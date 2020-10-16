@@ -16,6 +16,7 @@ snapshot = str(shop)
 currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 print("successfully hashed snapshot of shop")
 print("Hash: " + currentHash)
+print(datetime.now())
         
 while True:
 
