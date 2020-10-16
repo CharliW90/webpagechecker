@@ -44,11 +44,12 @@ while True:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             prefix = str("York Ghost Merchants Shop: Change Detected - ")
             header = prefix + logdate
+            bodystring = str(shop)
             print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
             msg = EmailMessage()
-            msg.set_content(shop)
+            msg.set_content(bodystring)
             msg['From'] = 'arcadius.webster@googlemail.com'
             msg['To'] = 'acey.williams@googlemail.com'
             msg['Subject'] = str(header)
@@ -76,9 +77,10 @@ while True:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             prefix = str("York Ghost Merchants Shop: Error #" + errorcount)
             errormsg = str(e)
+            bodystring = str(responsedate.text)
             header = prefix + errormsg + " - " + logdate
             msg = EmailMessage()
-            msg.set_content(errormsg + " -- " + responsedata.text)
+            msg.set_content(bodystring)
             msg['From'] = 'arcadius.webster@googlemail.com'
             msg['To'] = 'acey.williams@googlemail.com'
             msg['Subject'] = str(header)
