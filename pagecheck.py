@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 url = os.environ.get("pagetocheck")
 response = urlopen(url)
 page = BeautifulSoup(response, 'html.parser')
-shop = soup.find('div', {"class": "products-flex-container"})
+shop = page.find('div', {"class": "products-flex-container"})
 currentHash = hashlib.sha224(shop).hexdigest()
         
 while True:
@@ -19,12 +19,12 @@ while True:
 
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
-        shop = soup.find('div', {"class": "products-flex-container"})
+        shop = page.find('div', {"class": "products-flex-container"})
         currentHash = hashlib.sha224(shop).hexdigest()
         time.sleep(30)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
-        shop = soup.find('div', {"class": "products-flex-container"})
+        shop = page.find('div', {"class": "products-flex-container"})
         newHash = hashlib.sha224(shop).hexdigest()
 
         if newHash == currentHash:
