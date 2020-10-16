@@ -13,6 +13,8 @@ page = BeautifulSoup(response, 'html.parser')
 shop = page.find('div', {"class": "products-flex-container"})
 snapshot = str(shop)
 currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+print("successfully hashed snapshot of shop")
+print(currentHash)
         
 while True:
 
