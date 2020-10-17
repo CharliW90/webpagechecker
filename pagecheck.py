@@ -68,17 +68,15 @@ while True:
             currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
             time.sleep(300)
             continue
-
-    except Exception as e:
+    
+    except (http.client.IncompleteRead) as e:
         
-        if e = IncompleteRead:
-            
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             error = str("Incomplete Read: ")
             print(error + logdate)
             continue
         
-        else:
+    except Exception as e:
 
                 print(e)
                 errorcount +=1
