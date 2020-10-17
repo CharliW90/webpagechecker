@@ -19,6 +19,7 @@ print("successfully hashed snapshot of shop")
 print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 errorcount = 0
+print(str(response.text))
         
 while True:
 
