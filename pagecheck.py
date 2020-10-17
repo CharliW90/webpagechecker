@@ -104,7 +104,7 @@ while True:
             suffix = str(": APP OFFLINE")
             errormsg = str(e)
             errordetail = str(responsedate.text)
-            bodystring = str(errormsg + \n + errordetail)
+            bodystring = str(errormsg \n errordetail)
             header = str(prefix + errormsg + suffix + " - " + logdate)
             print(header)
             print(errormsg)
