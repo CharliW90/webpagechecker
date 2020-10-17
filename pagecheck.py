@@ -69,7 +69,7 @@ while True:
             time.sleep(300)
             continue
     
-    except (http.client.IncompleteRead) as e:
+    except IncompleteRead as e:
         
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             error = str("Incomplete Read: ")
