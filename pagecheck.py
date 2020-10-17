@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
-url = os.environ.get("pagetocheck")
+url = os.environ.get("page_tocheck")
 response = urlopen(url)
 page = BeautifulSoup(response, 'html.parser')
-shop = page.find('div', {"class": "products-flex-container"})
+shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
 snapshot = str(shop)
 currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 print("successfully hashed snapshot of shop")
@@ -26,13 +26,13 @@ while True:
 
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
-        shop = page.find('div', {"class": "products-flex-container"})
+        shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
         snapshot = str(shop)
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-        time.sleep(60)
+        time.sleep(45)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
-        shop = page.find('div', {"class": "products-flex-container"})
+        shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
         snapshot = str(shop)
         newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 
@@ -50,23 +50,23 @@ while True:
             print("newHash: " + newHash)
             msg = EmailMessage()
             msg.set_content(bodystring)
-            msg['From'] = 'arcadius.webster@googlemail.com'
-            msg['To'] = 'acey.williams@googlemail.com'
+            msg['From'] = os.environ.get("gmail_send_account")
+            msg['To'] = os.environ.get("gmail_recipient_account")
             msg['Subject'] = str(header)
-            fromaddr = 'arcadius.webster@googlemail.com'
-            toaddrs = ['acey.williams@googlemail.com']
+            fromaddr = [os.environ.get("gmail_send_account")]
+            toaddrs = [os.environ.get("gmail_recipient_account")]
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
             response = urlopen(url)
             page = BeautifulSoup(response, 'html.parser')
-            shop = page.find('div', {"class": "products-flex-container"})
+            shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
             snapshot = str(shop)
             currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-            time.sleep(60)
+            time.sleep(300)
             continue
 
     except Exception as e:
@@ -75,41 +75,50 @@ while True:
         errorcount +=1
         if errorcount < 10:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str("York Ghost Merchants Shop: Error #" + errorcount)
+            errornum = str(errorcount)
+            prefix = str("York Ghost Merchants Shop: Error #" + errornum)
             errormsg = str(e)
             bodystring = str(responsedate.text)
-            header = prefix + errormsg + " - " + logdate
+            header = str(prefix + errormsg + " - " + logdate)
+            print(header)
+            print(errormsg)
+            print(bodystring)
             msg = EmailMessage()
             msg.set_content(bodystring)
-            msg['From'] = 'arcadius.webster@googlemail.com'
-            msg['To'] = 'acey.williams@googlemail.com'
+            msg['From'] = os.environ.get("gmail_send_account")
+            msg['To'] = os.environ.get("gmail_recipient_account")
             msg['Subject'] = str(header)
-            fromaddr = 'arcadius.webster@googlemail.com'
-            toaddrs = ['acey.williams@googlemail.com']
+            fromaddr = [os.environ.get("gmail_send_account")]
+            toaddrs = [os.environ.get("gmail_recipient_account")]
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
-            time.sleep(60)
+            time.sleep(300)
             continue
         else:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             prefix = str("York Ghost Merchants Shop: Final Error - ")
             suffix = str(": APP OFFLINE")
             errormsg = str(e)
-            header = prefix + errormsg + suffix + " - " + logdate 
+            errordetail = str(responsedate.text)
+            bodystring = str(errormsg + \n + errordetail)
+            header = str(prefix + errormsg + suffix + " - " + logdate)
+            print(header)
+            print(errormsg)
+            print(bodystring)
             msg = EmailMessage()
-            msg.set_content(errormsg + "--" + responsedata.text)
-            msg['From'] = 'arcadius.webster@googlemail.com'
-            msg['To'] = 'acey.williams@googlemail.com'
+            msg.set_content(bodystring)
+            msg['From'] = os.environ.get("gmail_send_account")
+            msg['To'] = os.environ.get("gmail_recipient_account")
             msg['Subject'] = str(header)
-            fromaddr = 'arcadius.webster@googlemail.com'
-            toaddrs = ['acey.williams@googlemail.com']
+            fromaddr = [os.environ.get("gmail_send_account")]
+            toaddrs = [os.environ.get("gmail_recipient_account")]
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login('arcadius.webster@googlemail.com', os.environ.get("gmailpassword"))
+            server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
             server.send_message(msg)
             server.quit()
