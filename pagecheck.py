@@ -29,7 +29,7 @@ while True:
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
         snapshot = str(shop)
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-        time.sleep(45)
+        time.sleep(60)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
