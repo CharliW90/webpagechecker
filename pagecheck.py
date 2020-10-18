@@ -19,6 +19,7 @@ print("successfully hashed snapshot of shop")
 print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 errorcount = 0
+readfail = 0
         
 while True:
 
@@ -37,6 +38,8 @@ while True:
         newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 
         if newHash == currentHash:
+            if readfail > 0
+                readfail -= 1
             continue
 
         else:
@@ -74,7 +77,30 @@ while True:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             error = str("Incomplete Read: ")
             print(error + logdate)
-            continue
+            readfail += 1
+                if readfail > 10
+                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                    prefix = str("York Ghost Merchants Shop: Final Read Error - ")
+                    suffix = str(": APP OFFLINE")
+                    errormsg = str("10th Incomplete Read")
+                    header = str(prefix + errormsg + suffix + " - " + logdate)
+                    print(header)
+                    print(errormsg)
+                    msg = EmailMessage()
+                    msg.set_content(errormsg)
+                    msg['From'] = os.environ.get("gmail_send_account")
+                    msg['To'] = os.environ.get("gmail_recipient_account")
+                    msg['Subject'] = str(header)
+                    fromaddr = [os.environ.get("gmail_send_account")]
+                    toaddrs = [os.environ.get("gmail_recipient_account")]
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                    server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                    server.send_message(msg)
+                    server.quit()
+                else
+                    continue
         
     except Exception as e:
 
