@@ -77,7 +77,7 @@ while True:
     except IncompleteRead:
         
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            error = str("Incomplete Read: ")
+            error = str("Incomplete Read #" + str(readfail) + ": ")
             print(error + logdate)
             readfail += 1
                 if readfail >= 10:
