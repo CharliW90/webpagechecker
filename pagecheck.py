@@ -45,7 +45,6 @@ while True:
                 continue
 
         else:
-
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             prefix = str("York Ghost Merchants Shop: Change Detected - ")
             header = prefix + logdate
@@ -75,34 +74,34 @@ while True:
             continue
     
     except IncompleteRead:
-        
+
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             error = str("Incomplete Read #" + str(readfail) + ": ")
             print(error + logdate)
             readfail += 1
-                if readfail >= 10:
-                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    prefix = str("York Ghost Merchants Shop: Final Read Error - ")
-                    suffix = str(": APP OFFLINE")
-                    errormsg = str("10th Incomplete Read")
-                    header = str(prefix + errormsg + suffix + " - " + logdate)
-                    print(header)
-                    print(errormsg)
-                    msg = EmailMessage()
-                    msg.set_content(errormsg)
-                    msg['From'] = os.environ.get("gmail_send_account")
-                    msg['To'] = os.environ.get("gmail_recipient_account")
-                    msg['Subject'] = str(header)
-                    fromaddr = [os.environ.get("gmail_send_account")]
-                    toaddrs = [os.environ.get("gmail_recipient_account")]
-                    server = smtplib.SMTP('smtp.gmail.com', 587)
-                    server.starttls()
-                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
-                    server.send_message(msg)
-                    server.quit()
-                else:
-                    continue
+            if readfail >= 10:
+                logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                prefix = str("York Ghost Merchants Shop: Final Read Error - ")
+                suffix = str(": APP OFFLINE")
+                errormsg = str("10th Incomplete Read")
+                header = str(prefix + errormsg + suffix + " - " + logdate)
+                print(header)
+                print(errormsg)
+                msg = EmailMessage()
+                msg.set_content(errormsg)
+                msg['From'] = os.environ.get("gmail_send_account")
+                msg['To'] = os.environ.get("gmail_recipient_account")
+                msg['Subject'] = str(header)
+                fromaddr = [os.environ.get("gmail_send_account")]
+                toaddrs = [os.environ.get("gmail_recipient_account")]
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.starttls()
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                server.send_message(msg)
+                server.quit()
+            else:
+                continue
         
     except Exception as e:
 
