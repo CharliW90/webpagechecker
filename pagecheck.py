@@ -116,7 +116,6 @@ while True:
                     header = str(prefix + errormsg + " - " + logdate)
                     print(header)
                     print(errormsg)
-                    print(bodystring)
                     msg = EmailMessage()
                     msg.set_content(page)
                     msg['From'] = os.environ.get("gmail_send_account")
