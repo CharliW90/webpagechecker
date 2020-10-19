@@ -58,7 +58,7 @@ while True:
             fromaddr = [os.environ.get("gmail_send_account")]
             toaddrs = [os.environ.get("gmail_recipient_account")]
             continue
-        time.sleep(90)
+        time.sleep(30)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
@@ -91,7 +91,7 @@ while True:
             shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
             snapshot = str(shop)
             currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-            time.sleep(120)
+            time.sleep(150)
             continue
 
     except http.client.IncompleteRead:
@@ -138,7 +138,7 @@ while True:
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
                     server.send_message(msg)
-                    time.sleep(120)
+                    time.sleep(150)
                     continue
                 else:
                     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
