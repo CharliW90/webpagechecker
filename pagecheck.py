@@ -58,7 +58,7 @@ while True:
             fromaddr = [os.environ.get("gmail_send_account")]
             toaddrs = [os.environ.get("gmail_recipient_account")]
             continue
-        time.sleep(30)
+        time.sleep(60)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
@@ -133,7 +133,7 @@ while True:
                     print(header)
                     print(errormsg)
                     msg = EmailMessage()
-                    msg.set_content(page)
+                    msg.set_content(errorpageheaders)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
@@ -154,7 +154,7 @@ while True:
                     errorpageheaders = str(response.headers)
                     print("Page headers: " + errorpageheaders)
                     msg = EmailMessage()
-                    msg.set_content(bodystring)
+                    msg.set_content(errorpageheaders)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
