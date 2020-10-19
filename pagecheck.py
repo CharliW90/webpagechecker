@@ -11,7 +11,8 @@ from datetime import datetime
 from datetime import timedelta
 
 url = os.environ.get("page_tocheck")
-response = urlopen(url)
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
+response = urlopen(url, headers=headers)
 page = BeautifulSoup(response, 'html.parser')
 shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
 snapshot = str(shop)
@@ -107,6 +108,8 @@ while True:
     except Exception as e:
 
                 print(e)
+                errorpageheaders = str(response.headers)
+                print("Page headers: " + errorpageheaders)
                 errorcount +=1
                 if errorcount < 10:
                     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
@@ -142,6 +145,8 @@ while True:
                     print(header)
                     print(errormsg)
                     print(bodystring)
+                    errorpageheaders = str(response.headers)
+                    print("Page headers: " + errorpageheaders)
                     msg = EmailMessage()
                     msg.set_content(bodystring)
                     msg['From'] = os.environ.get("gmail_send_account")
