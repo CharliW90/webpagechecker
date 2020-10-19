@@ -74,7 +74,7 @@ while True:
 
         else:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str("York Ghost Merchants Shop: Change Detected - ")
+            prefix = str(url + ": Change Detected - ")
             header = prefix + logdate
             bodystring = str(shop)
             print(header)
@@ -102,7 +102,7 @@ while True:
             print(error + logdate)
             if readfail >= 10:
                 logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                prefix = str("York Ghost Merchants Shop: Final Read Error - ")
+                prefix = str(url + ": Final Read Error - ")
                 suffix = str(": APP OFFLINE")
                 errormsg = str("10th Incomplete Read")
                 header = str(prefix + errormsg + suffix + " - " + logdate)
@@ -127,7 +127,7 @@ while True:
                 if errorcount < 10:
                     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
                     errornum = str(errorcount)
-                    prefix = str("York Ghost Merchants Shop: Error #" + errornum)
+                    prefix = str(url + ": Error #" + errornum)
                     errormsg = str(e)
                     header = str(prefix + errormsg + " - " + logdate)
                     print(header)
@@ -142,7 +142,7 @@ while True:
                     continue
                 else:
                     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    prefix = str("York Ghost Merchants Shop: Final Error - ")
+                    prefix = str(url + ": Final Error - ")
                     suffix = str(": APP OFFLINE")
                     errormsg = str(e)
                     errordetail = str(page)
