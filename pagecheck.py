@@ -12,7 +12,8 @@ from datetime import timedelta
 
 url = os.environ.get("page_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
-response = urlopen(url, headers=headers)
+request = Request(url, headers=headers)
+response = urlopen(request)
 page = BeautifulSoup(response, 'html.parser')
 shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
 snapshot = str(shop)
