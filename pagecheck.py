@@ -17,9 +17,9 @@ server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword
 fromaddr = [os.environ.get("gmail_send_account")]
 toaddrs = [os.environ.get("gmail_recipient_account")]
 
-def test_conn_open(conn):
+def test_conn_open(server):
     try:
-        status = conn.noop()[0]
+        status = server.noop()[0]
     except:  # smtplib.SMTPServerDisconnected
         status = -1
     return True if status == 250 else False
@@ -48,7 +48,7 @@ while True:
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
         snapshot = str(shop)
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-        if not test_conn_open(conn):
+        if not test_conn_open(server):
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             print("smtp client closed.  reconnecting." + logdate)
             server = smtplib.SMTP('smtp.gmail.com', 587)
