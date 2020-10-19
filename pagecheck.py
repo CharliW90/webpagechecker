@@ -5,7 +5,7 @@ import time
 import smtplib
 from email.message import EmailMessage
 import hashlib
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
