@@ -10,6 +10,11 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
+server = smtplib.SMTP('smtp.gmail.com', 587)
+server.starttls()
+server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+
 url = os.environ.get("page_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
@@ -62,12 +67,7 @@ while True:
             msg['Subject'] = str(header)
             fromaddr = [os.environ.get("gmail_send_account")]
             toaddrs = [os.environ.get("gmail_recipient_account")]
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
             server.send_message(msg)
-            server.quit()
             response = urlopen(url)
             page = BeautifulSoup(response, 'html.parser')
             shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
@@ -97,10 +97,6 @@ while True:
                 msg['Subject'] = str(header)
                 fromaddr = [os.environ.get("gmail_send_account")]
                 toaddrs = [os.environ.get("gmail_recipient_account")]
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()
-                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
                 server.send_message(msg)
                 server.quit()
             else:
@@ -127,12 +123,7 @@ while True:
                     msg['Subject'] = str(header)
                     fromaddr = [os.environ.get("gmail_send_account")]
                     toaddrs = [os.environ.get("gmail_recipient_account")]
-                    server = smtplib.SMTP('smtp.gmail.com', 587)
-                    server.starttls()
-                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
                     server.send_message(msg)
-                    server.quit()
                     time.sleep(120)
                     continue
                 else:
@@ -155,9 +146,5 @@ while True:
                     msg['Subject'] = str(header)
                     fromaddr = [os.environ.get("gmail_send_account")]
                     toaddrs = [os.environ.get("gmail_recipient_account")]
-                    server = smtplib.SMTP('smtp.gmail.com', 587)
-                    server.starttls()
-                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
                     server.send_message(msg)
                     server.quit()
