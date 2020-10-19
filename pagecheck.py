@@ -31,7 +31,7 @@ while True:
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
         snapshot = str(shop)
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-        time.sleep(60)
+        time.sleep(90)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
         shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
@@ -76,10 +76,10 @@ while True:
     
     except http.client.IncompleteRead:
 
+            readfail += 1
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             error = str("Incomplete Read #" + str(readfail) + ": ")
             print(error + logdate)
-            readfail += 1
             if readfail >= 10:
                 logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
                 prefix = str("York Ghost Merchants Shop: Final Read Error - ")
