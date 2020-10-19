@@ -14,21 +14,31 @@ server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+fromaddr = [os.environ.get("gmail_send_account")]
+toaddrs = [os.environ.get("gmail_recipient_account")]
+
+def test_conn_open(conn):
+    try:
+        status = conn.noop()[0]
+    except:  # smtplib.SMTPServerDisconnected
+        status = -1
+    return True if status == 250 else False
 
 url = os.environ.get("page_tocheck")
+divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
 response = urlopen(request)
 page = BeautifulSoup(response, 'html.parser')
-shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
+shop = page.find('div', {"class": divclass})
 snapshot = str(shop)
 currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-print("successfully hashed snapshot of shop")
+print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 errorcount = 0
 readfail = 0
-        
+
 while True:
 
     try:
@@ -60,13 +70,20 @@ while True:
             print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
+            if not test_conn_open(conn):
+                print("smtp client closed.  reconnecting.")
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.starttls()
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                fromaddr = [os.environ.get("gmail_send_account")]
+                toaddrs = [os.environ.get("gmail_recipient_account")]
+                continue
             msg = EmailMessage()
             msg.set_content(bodystring)
             msg['From'] = os.environ.get("gmail_send_account")
             msg['To'] = os.environ.get("gmail_recipient_account")
             msg['Subject'] = str(header)
-            fromaddr = [os.environ.get("gmail_send_account")]
-            toaddrs = [os.environ.get("gmail_recipient_account")]
             server.send_message(msg)
             response = urlopen(url)
             page = BeautifulSoup(response, 'html.parser')
@@ -75,7 +92,7 @@ while True:
             currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
             time.sleep(120)
             continue
-    
+
     except http.client.IncompleteRead:
 
             readfail += 1
@@ -90,18 +107,25 @@ while True:
                 header = str(prefix + errormsg + suffix + " - " + logdate)
                 print(header)
                 print(errormsg)
+                if not test_conn_open(conn):
+                        print("smtp client closed.  reconnecting.")
+                        server = smtplib.SMTP('smtp.gmail.com', 587)
+                        server.starttls()
+                        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                        server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                        fromaddr = [os.environ.get("gmail_send_account")]
+                        toaddrs = [os.environ.get("gmail_recipient_account")]
+                        continue
                 msg = EmailMessage()
                 msg.set_content(errormsg)
                 msg['From'] = os.environ.get("gmail_send_account")
                 msg['To'] = os.environ.get("gmail_recipient_account")
                 msg['Subject'] = str(header)
-                fromaddr = [os.environ.get("gmail_send_account")]
-                toaddrs = [os.environ.get("gmail_recipient_account")]
                 server.send_message(msg)
                 server.quit()
             else:
                 continue
-        
+
     except Exception as e:
 
                 print(e)
@@ -116,13 +140,20 @@ while True:
                     header = str(prefix + errormsg + " - " + logdate)
                     print(header)
                     print(errormsg)
+                    if not test_conn_open(conn):
+                        print("smtp client closed.  reconnecting.")
+                        server = smtplib.SMTP('smtp.gmail.com', 587)
+                        server.starttls()
+                        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                        server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                        fromaddr = [os.environ.get("gmail_send_account")]
+                        toaddrs = [os.environ.get("gmail_recipient_account")]
+                        continue
                     msg = EmailMessage()
                     msg.set_content(page)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
-                    fromaddr = [os.environ.get("gmail_send_account")]
-                    toaddrs = [os.environ.get("gmail_recipient_account")]
                     server.send_message(msg)
                     time.sleep(120)
                     continue
@@ -139,12 +170,19 @@ while True:
                     print(bodystring)
                     errorpageheaders = str(response.headers)
                     print("Page headers: " + errorpageheaders)
+                    if not test_conn_open(conn):
+                        print("smtp client closed.  reconnecting.")
+                        server = smtplib.SMTP('smtp.gmail.com', 587)
+                        server.starttls()
+                        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                        server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+                        fromaddr = [os.environ.get("gmail_send_account")]
+                        toaddrs = [os.environ.get("gmail_recipient_account")]
+                        continue
                     msg = EmailMessage()
                     msg.set_content(bodystring)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
-                    fromaddr = [os.environ.get("gmail_send_account")]
-                    toaddrs = [os.environ.get("gmail_recipient_account")]
                     server.send_message(msg)
                     server.quit()
