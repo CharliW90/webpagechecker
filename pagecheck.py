@@ -78,7 +78,7 @@ while True:
         newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 
         if newHash == currentHash:
-        hashes += 1
+            hashes += 1
             if hashes >= 60:
                 print("succesfully completed " + hashes + " hashes")
                 hashes = 0
