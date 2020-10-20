@@ -38,6 +38,7 @@ print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 errorcount = 0
 readfail = 0
+readsuccess = 0
 
 while True:
 
@@ -67,10 +68,12 @@ while True:
 
         if newHash == currentHash:
             if readfail > 0:
-                readfail -= 1
-                continue
-            else:
-                continue
+                readsuccess += 1
+                if readsuccess >= 5
+                    readfail = 0
+                    readsuccess = 0
+                    print("Read Successful 5 Times :: Incomplete Read Count Reset")
+            continue
 
         else:
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
