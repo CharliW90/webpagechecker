@@ -10,12 +10,17 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
-fromaddr = [os.environ.get("gmail_send_account")]
-toaddrs = [os.environ.get("gmail_recipient_account")]
+def open_conn():
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+    fromaddr = [os.environ.get("gmail_send_account")]
+    toaddrs = [os.environ.get("gmail_recipient_account")]
+    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+    print("smtp client opened: " + logdate)
+    
+open_conn()
 
 def test_conn_open(server):
     try:
@@ -52,13 +57,7 @@ while True:
         if not test_conn_open(server):
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             print("smtp client closed.  reconnecting." + logdate)
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-            server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
-            fromaddr = [os.environ.get("gmail_send_account")]
-            toaddrs = [os.environ.get("gmail_recipient_account")]
-            continue
+            open_conn()
         time.sleep(60)
         response = urlopen(url)
         page = BeautifulSoup(response, 'html.parser')
@@ -83,6 +82,10 @@ while True:
             print(header)
             print("currentHash: " + currentHash)
             print("newHash: " + newHash)
+            if not test_conn_open(server):
+                logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                print("smtp client closed.  reconnecting." + logdate)
+                open_conn()
             msg = EmailMessage()
             msg.set_content(bodystring)
             msg['From'] = os.environ.get("gmail_send_account")
@@ -111,6 +114,10 @@ while True:
                 header = str(prefix + errormsg + suffix + " - " + logdate)
                 print(header)
                 print(errormsg)
+                if not test_conn_open(server):
+                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                    print("smtp client closed.  reconnecting." + logdate)
+                    open_conn()
                 msg = EmailMessage()
                 msg.set_content(errormsg)
                 msg['From'] = os.environ.get("gmail_send_account")
@@ -135,6 +142,10 @@ while True:
                     header = str(prefix + errormsg + " - " + logdate)
                     print(header)
                     print(errormsg)
+                    if not test_conn_open(server):
+                        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                        print("smtp client closed.  reconnecting." + logdate)
+                        open_conn()
                     msg = EmailMessage()
                     msg.set_content(errorpageheaders)
                     msg['From'] = os.environ.get("gmail_send_account")
@@ -156,6 +167,10 @@ while True:
                     print(bodystring)
                     errorpageheaders = str(response.headers)
                     print("Page headers: " + errorpageheaders)
+                    if not test_conn_open(server):
+                        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                        print("smtp client closed.  reconnecting." + logdate)
+                        open_conn()
                     msg = EmailMessage()
                     msg.set_content(errorpageheaders)
                     msg['From'] = os.environ.get("gmail_send_account")
