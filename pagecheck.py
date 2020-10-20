@@ -11,11 +11,14 @@ from datetime import datetime
 from datetime import timedelta
 
 def open_conn():
+    global server
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login(os.environ.get("gmail_send_account"), os.environ.get("gmailpassword"))
+    global fromaddr
     fromaddr = [os.environ.get("gmail_send_account")]
+    global toaddrs
     toaddrs = [os.environ.get("gmail_recipient_account")]
     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
     print("smtp client opened: " + logdate)
