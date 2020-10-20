@@ -32,6 +32,14 @@ def test_conn_open(server):
         status = -1
     return True if status == 250 else False
 
+if not test_conn_open(server):
+    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+    print("smtp client failed at startup.  reconnecting... " + logdate)
+    open_conn()
+else:
+    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+    print("smtp client succesfully logged in: " + logdate)
+
 url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
@@ -44,6 +52,7 @@ currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + currentHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+hashes = 0
 errorcount = 0
 readfail = 0
 readsuccess = 0
@@ -59,7 +68,7 @@ while True:
         currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
         if not test_conn_open(server):
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            print("smtp client closed.  reconnecting." + logdate)
+            print("smtp client closed.  reconnecting... " + logdate)
             open_conn()
         time.sleep(60)
         response = urlopen(url)
@@ -69,12 +78,16 @@ while True:
         newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
 
         if newHash == currentHash:
+        hashes += 1
+            if hashes >= 60:
+                print("succesfully completed " + hashes + " hashes")
+                hashes = 0
             if readfail > 0:
                 readsuccess += 1
-                if readsuccess >= 5:
+                if readsuccess >= 10:
                     readfail = 0
                     readsuccess = 0
-                    print("Read Successful 5 Times :: Incomplete Read Count Reset")
+                    print("Read Successful 10 Times :: Incomplete Read Count Reset")
             continue
 
         else:
