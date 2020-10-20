@@ -69,7 +69,7 @@ while True:
         if newHash == currentHash:
             if readfail > 0:
                 readsuccess += 1
-                if readsuccess >= 5
+                if readsuccess >= 5:
                     readfail = 0
                     readsuccess = 0
                     print("Read Successful 5 Times :: Incomplete Read Count Reset")
