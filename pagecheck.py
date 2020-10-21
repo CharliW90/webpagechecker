@@ -46,9 +46,13 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 request = Request(url, headers=headers)
 
 def hash_fetch():
+    global response
     response = urlopen(request)
+    global page
     page = BeautifulSoup(response, 'html.parser')
+    global shop
     shop = page.find('div', {"class": divclass})
+    global snapshot
     snapshot = str(shop)
     global result
     result = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
