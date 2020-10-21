@@ -44,13 +44,19 @@ url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
-response = urlopen(request)
-page = BeautifulSoup(response, 'html.parser')
-shop = page.find('div', {"class": divclass})
-snapshot = str(shop)
-currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+
+def hash_fetch():
+    response = urlopen(request)
+    page = BeautifulSoup(response, 'html.parser')
+    shop = page.find('div', {"class": divclass})
+    snapshot = str(shop)
+    global result
+    result = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+    return result
+
+newHash = hash_fetch()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
-print("Hash: " + currentHash)
+print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 hashes = 0
 errorcount = 0
@@ -60,27 +66,18 @@ readsuccess = 0
 while True:
 
     try:
-
-        response = urlopen(url)
-        page = BeautifulSoup(response, 'html.parser')
-        shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
-        snapshot = str(shop)
-        currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+        currentHash = newHash
+        time.sleep(30)
         if not test_conn_open(server):
             logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
             print("smtp client closed.  reconnecting... " + logdate)
             open_conn()
-        time.sleep(60)
-        response = urlopen(url)
-        page = BeautifulSoup(response, 'html.parser')
-        shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
-        snapshot = str(shop)
-        newHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+        newHash = hash_fetch()
 
         if newHash == currentHash:
             hashes += 1
-            if hashes >= 60:
-                print("succesfully completed " + hashes + " hashes")
+            if hashes >= 100:
+                print("succesfully completed " + str(hashes) + " hashes")
                 hashes = 0
             if readfail > 0:
                 readsuccess += 1
