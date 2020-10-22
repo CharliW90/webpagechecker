@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
+
 def open_conn():
     global server
     server = smtplib.SMTP('smtp.gmail.com', 587)
