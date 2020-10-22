@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
-from slackclient import SlackClient
+from slackclient import slackclient
 from slack.errors import SlackApiError
 
 def open_conn():
