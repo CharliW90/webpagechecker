@@ -1,3 +1,4 @@
 requests
 requests-html
 beautifulsoup4
+slack
