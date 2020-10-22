@@ -55,7 +55,7 @@ sender_num = os.environ.get("twilio_mobile_number")
 
 def sms_ping(message):
     twilio_client = Client(Twilio_Account_SID, Twilio_Auth_Token)
-    client.messages.create(to=recipient_num, 
+    twilio_client.messages.create(to=recipient_num, 
                            from_=sender_num, 
                            body="Webpage Checker Ping!" + message)
 
