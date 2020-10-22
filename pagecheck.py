@@ -46,7 +46,6 @@ url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
-slack_token = os.environ.get("slack_api_token")
 slack_client = WebClient(token=slack_token)
 
 def hash_fetch():
@@ -72,7 +71,7 @@ readfail = 0
 readsuccess = 0
 
 try:
-  response = slack_client.chat_postMessage(
+    slack_response = slack_client.chat_postMessage(
     channel="C01D1NWU0SZ",
     text=("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
   )
