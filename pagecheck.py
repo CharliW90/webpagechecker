@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
+from twilio.rest import Client
 
 # heroku deployment stage
 time.sleep(30)
@@ -46,6 +47,18 @@ else:
     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
     print("smtp client succesfully logged in: " + logdate)
 
+# prepare twilio connection
+Twilio_Account_SID = os.environ.get("Twilio_Account_SID") 
+Twilio_Auth_Token = os.environ.get("Twilio_Auth_Token")
+recipient_num = os.environ.get("recipients_mobile_number")
+sender_num = os.environ.get("twilio_mobile_number")
+
+def sms_ping(message):
+    twilio_client = Client(Twilio_Account_SID, Twilio_Auth_Token)
+    client.messages.create(to=recipient_num, 
+                           from_=sender_num, 
+                           body="Webpage Checker Ping!" + message)
+
 # prepare variables
 url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
@@ -69,6 +82,7 @@ newHash = hash_fetch()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+sms_ping("App Deployed Succesfully")
 hashes = 0
 errorcount = 0
 readfail = 0
