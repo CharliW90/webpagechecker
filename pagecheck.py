@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
-from slack import SlackClient
+from slack import WebClient
 from slack.errors import SlackApiError
 
 def open_conn():
@@ -47,7 +47,7 @@ divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
 slack_token = os.environ.get("slack_api_token")
-slack_client = SlackClient(token=slack_token)
+slack_client = WebClient(token=slack_token)
 
 def hash_fetch():
     global response
