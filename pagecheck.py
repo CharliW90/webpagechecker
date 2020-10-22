@@ -10,7 +10,10 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
-# gmail connection
+# heroku deployment stage
+time.sleep(30)
+
+# gmail connection stage
 def open_conn():
     global server
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -25,6 +28,8 @@ def open_conn():
     print("smtp client opened: " + logdate)
     
 open_conn()
+
+# test gmail connection...
 
 def test_conn_open(server):
     try:
@@ -41,6 +46,7 @@ else:
     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
     print("smtp client succesfully logged in: " + logdate)
 
+# prepare variables
 url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
@@ -68,6 +74,7 @@ errorcount = 0
 readfail = 0
 readsuccess = 0
 
+# begin loop to check page for changes
 while True:
 
     try:
