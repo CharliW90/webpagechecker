@@ -62,6 +62,7 @@ def sms_ping(message):
 # prepare variables
 url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
+divclassexpectation = os.environ.get("expected_result")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
 accountLoginURL = str(url + "/account/login")
@@ -84,149 +85,157 @@ print("Successfully hashed snapshot of the div class: " + divclass + " at " + ur
 print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 defaultPageContent = str(shop)
-print("Default Page Content has been set to: " + defaultPageContent + "if this is incorrect, app will fail to notify of changes")
-sms_ping("App Deployed Succesfully with default page set to: " + defaultPageContent)
-hashes = 0
-errorcount = 0
-readfail = 0
-readsuccess = 0
 
-# account login
-with Session() as s:
-    accountLogin = s.get(accountLoginURL)
-    print(accountLogin)
+while not (startupPageContent = divclassexpectation):
+    print("App Deployed Succesfully but the startup page does not match expected page...")
+    wait(270)
+    print("Rechecking startup page and expected page...")
+    wait(30)
+else:
+    print("Startup Page Content matches expected page.  App deployed.")
+    sms_ping("App Deployed Succesfully with startup page matching expected page.")
 
-# begin loop to check page for changes
-while True:
+    hashes = 0
+    errorcount = 0
+    readfail = 0
+    readsuccess = 0
 
-    try:
-        currentHash = newHash
-        time.sleep(30)
-        if not test_conn_open(server):
-            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            print("smtp client closed.  reconnecting... " + logdate)
-            open_conn()
-        newHash = hash_fetch()
+    # account login
+    with Session() as s:
+        accountLogin = s.get(accountLoginURL)
+        print(accountLogin)
 
-        if newHash == currentHash:
-            hashes += 1
-            if hashes >= 100:
-                print("succesfully completed " + str(hashes) + " hashes")
-                hashes = 0
-            if readfail > 0:
-                readsuccess += 1
-                if readsuccess >= 10:
-                    readfail = 0
-                    readsuccess = 0
-                    print("Read Successful 10 Times :: Incomplete Read Count Reset")
-            continue
+    # begin loop to check page for changes
+    while True:
 
-        else:
-            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            prefix = str(url + ": Change Detected - ")
-            header = prefix + logdate
-            bodystring = str(shop)
-            if str(shop) == defaultPageContent:
-                print("Page returned to empty.  Resuming monitoring.")
-                continue
-            else:
-                print(header)
-                print("currentHash: " + currentHash)
-                print("newHash: " + newHash)
-                sms_ping(header)
-                if not test_conn_open(server):
-                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    print("smtp client closed.  reconnecting." + logdate)
-                    open_conn()
-                msg = EmailMessage()
-                msg.set_content(bodystring)
-                msg['From'] = os.environ.get("gmail_send_account")
-                msg['To'] = os.environ.get("gmail_recipient_account")
-                msg['Subject'] = str(header)
-                server.send_message(msg)
-                response = urlopen(url)
-                page = BeautifulSoup(response, 'html.parser')
-                shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
-                snapshot = str(shop)
-                currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-                time.sleep(150)
-                continue
-
-    except http.client.IncompleteRead:
-
-            readfail += 1
-            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-            error = str("Incomplete Read #" + str(readfail) + ": ")
-            print(error + logdate)
-            if readfail >= 10:
+        try:
+            currentHash = newHash
+            time.sleep(30)
+            if not test_conn_open(server):
                 logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                prefix = str(url + ": Final Read Error - ")
-                suffix = str(": APP OFFLINE")
-                errormsg = str("10th Incomplete Read")
-                header = str(prefix + errormsg + suffix + " - " + logdate)
-                print(header)
-                print(errormsg)
-                if not test_conn_open(server):
-                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    print("smtp client closed.  reconnecting." + logdate)
-                    open_conn()
-                msg = EmailMessage()
-                msg.set_content(errormsg)
-                msg['From'] = os.environ.get("gmail_send_account")
-                msg['To'] = os.environ.get("gmail_recipient_account")
-                msg['Subject'] = str(header)
-                server.send_message(msg)
-                server.quit()
-            else:
+                print("smtp client closed.  reconnecting... " + logdate)
+                open_conn()
+            newHash = hash_fetch()
+
+            if newHash == currentHash:
+                hashes += 1
+                if hashes >= 100:
+                    print("succesfully completed " + str(hashes) + " hashes")
+                    hashes = 0
+                if readfail > 0:
+                    readsuccess += 1
+                    if readsuccess >= 10:
+                        readfail = 0
+                        readsuccess = 0
+                        print("Read Successful 10 Times :: Incomplete Read Count Reset")
                 continue
 
-    except Exception as e:
-
-                print(e)
-                errorpageheaders = str(response.headers)
-                print("Page headers: " + errorpageheaders)
-                errorcount +=1
-                if errorcount < 10:
-                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    errornum = str(errorcount)
-                    prefix = str(url + ": Error #" + errornum)
-                    errormsg = str(e)
-                    header = str(prefix + errormsg + " - " + logdate)
+            else:
+                logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                prefix = str(url + ": Change Detected - ")
+                header = prefix + logdate
+                bodystring = str(shop)
+                if str(shop) == defaultPageContent:
+                    print("Page returned to empty.  Resuming monitoring.")
+                    continue
+                else:
                     print(header)
-                    print(errormsg)
+                    print("currentHash: " + currentHash)
+                    print("newHash: " + newHash)
+                    sms_ping(header)
                     if not test_conn_open(server):
                         logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
                         print("smtp client closed.  reconnecting." + logdate)
                         open_conn()
                     msg = EmailMessage()
-                    msg.set_content(errorpageheaders)
+                    msg.set_content(bodystring)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
                     server.send_message(msg)
+                    response = urlopen(url)
+                    page = BeautifulSoup(response, 'html.parser')
+                    shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
+                    snapshot = str(shop)
+                    currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
                     time.sleep(150)
                     continue
-                else:
+
+        except http.client.IncompleteRead:
+
+                readfail += 1
+                logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                error = str("Incomplete Read #" + str(readfail) + ": ")
+                print(error + logdate)
+                if readfail >= 10:
                     logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                    prefix = str(url + ": Final Error - ")
+                    prefix = str(url + ": Final Read Error - ")
                     suffix = str(": APP OFFLINE")
-                    errormsg = str(e)
-                    errordetail = str(page)
-                    bodystring = str(errormsg + '\n' + errordetail)
+                    errormsg = str("10th Incomplete Read")
                     header = str(prefix + errormsg + suffix + " - " + logdate)
                     print(header)
                     print(errormsg)
-                    print(bodystring)
-                    errorpageheaders = str(response.headers)
-                    print("Page headers: " + errorpageheaders)
                     if not test_conn_open(server):
                         logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
                         print("smtp client closed.  reconnecting." + logdate)
                         open_conn()
                     msg = EmailMessage()
-                    msg.set_content(errorpageheaders)
+                    msg.set_content(errormsg)
                     msg['From'] = os.environ.get("gmail_send_account")
                     msg['To'] = os.environ.get("gmail_recipient_account")
                     msg['Subject'] = str(header)
                     server.send_message(msg)
                     server.quit()
+                else:
+                    continue
+
+        except Exception as e:
+
+                    print(e)
+                    errorpageheaders = str(response.headers)
+                    print("Page headers: " + errorpageheaders)
+                    errorcount +=1
+                    if errorcount < 10:
+                        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                        errornum = str(errorcount)
+                        prefix = str(url + ": Error #" + errornum)
+                        errormsg = str(e)
+                        header = str(prefix + errormsg + " - " + logdate)
+                        print(header)
+                        print(errormsg)
+                        if not test_conn_open(server):
+                            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                            print("smtp client closed.  reconnecting." + logdate)
+                            open_conn()
+                        msg = EmailMessage()
+                        msg.set_content(errorpageheaders)
+                        msg['From'] = os.environ.get("gmail_send_account")
+                        msg['To'] = os.environ.get("gmail_recipient_account")
+                        msg['Subject'] = str(header)
+                        server.send_message(msg)
+                        time.sleep(150)
+                        continue
+                    else:
+                        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                        prefix = str(url + ": Final Error - ")
+                        suffix = str(": APP OFFLINE")
+                        errormsg = str(e)
+                        errordetail = str(page)
+                        bodystring = str(errormsg + '\n' + errordetail)
+                        header = str(prefix + errormsg + suffix + " - " + logdate)
+                        print(header)
+                        print(errormsg)
+                        print(bodystring)
+                        errorpageheaders = str(response.headers)
+                        print("Page headers: " + errorpageheaders)
+                        if not test_conn_open(server):
+                            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                            print("smtp client closed.  reconnecting." + logdate)
+                            open_conn()
+                        msg = EmailMessage()
+                        msg.set_content(errorpageheaders)
+                        msg['From'] = os.environ.get("gmail_send_account")
+                        msg['To'] = os.environ.get("gmail_recipient_account")
+                        msg['Subject'] = str(header)
+                        server.send_message(msg)
+                        server.quit()
