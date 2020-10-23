@@ -86,7 +86,7 @@ print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
 defaultPageContent = str(shop)
 
-while not (startupPageContent = divclassexpectation):
+while not (startupPageContent == divclassexpectation):
     print("App Deployed Succesfully but the startup page does not match expected page...")
     wait(270)
     print("Rechecking startup page and expected page...")
