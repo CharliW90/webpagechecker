@@ -78,11 +78,13 @@ def hash_fetch():
     result = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
     return result
 
+defaultPageContent = str(shop)
+print("Default Page Content has been set to: " + defaultPageContent + "if this is incorrect, app will fail to notify of changes")
 newHash = hash_fetch()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-sms_ping("App Deployed Succesfully")
+sms_ping("App Deployed Succesfully with default page set to: " + defaultPageContent)
 hashes = 0
 errorcount = 0
 readfail = 0
@@ -118,27 +120,31 @@ while True:
             prefix = str(url + ": Change Detected - ")
             header = prefix + logdate
             bodystring = str(shop)
-            print(header)
-            print("currentHash: " + currentHash)
-            print("newHash: " + newHash)
-            sms_ping(header)
-            if not test_conn_open(server):
-                logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-                print("smtp client closed.  reconnecting." + logdate)
-                open_conn()
-            msg = EmailMessage()
-            msg.set_content(bodystring)
-            msg['From'] = os.environ.get("gmail_send_account")
-            msg['To'] = os.environ.get("gmail_recipient_account")
-            msg['Subject'] = str(header)
-            server.send_message(msg)
-            response = urlopen(url)
-            page = BeautifulSoup(response, 'html.parser')
-            shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
-            snapshot = str(shop)
-            currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
-            time.sleep(150)
-            continue
+            if (str(shop) === defaultPageContent):
+                print ("Page returned to empty.  Resuming monitoring.")
+                continue
+            else:
+                print(header)
+                print("currentHash: " + currentHash)
+                print("newHash: " + newHash)
+                sms_ping(header)
+                if not test_conn_open(server):
+                    logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                    print("smtp client closed.  reconnecting." + logdate)
+                    open_conn()
+                msg = EmailMessage()
+                msg.set_content(bodystring)
+                msg['From'] = os.environ.get("gmail_send_account")
+                msg['To'] = os.environ.get("gmail_recipient_account")
+                msg['Subject'] = str(header)
+                server.send_message(msg)
+                response = urlopen(url)
+                page = BeautifulSoup(response, 'html.parser')
+                shop = page.find('div', {"class": os.environ.get("divclass_tocheck")})
+                snapshot = str(shop)
+                currentHash = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
+                time.sleep(150)
+                continue
 
     except http.client.IncompleteRead:
 
