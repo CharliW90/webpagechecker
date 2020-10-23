@@ -79,12 +79,12 @@ def hash_fetch():
     result = hashlib.sha224(snapshot.encode('utf-8')).hexdigest()
     return result
 
-defaultPageContent = str(shop)
 print("Default Page Content has been set to: " + defaultPageContent + "if this is incorrect, app will fail to notify of changes")
 newHash = hash_fetch()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+defaultPageContent = str(shop)
 sms_ping("App Deployed Succesfully with default page set to: " + defaultPageContent)
 hashes = 0
 errorcount = 0
