@@ -120,7 +120,7 @@ while True:
             prefix = str(url + ": Change Detected - ")
             header = prefix + logdate
             bodystring = str(shop)
-            if (str(shop) === defaultPageContent):
+            if str(shop) == defaultPageContent:
                 print ("Page returned to empty.  Resuming monitoring.")
                 continue
             else:
