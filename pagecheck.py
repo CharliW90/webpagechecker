@@ -84,7 +84,7 @@ newHash = hash_fetch()
 print("Successfully hashed snapshot of the div class: " + divclass + " at " + url)
 print("Hash: " + newHash)
 print((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-defaultPageContent = str(shop)
+startupPageContent = str(shop)
 
 while not (startupPageContent == divclassexpectation):
     print("App Deployed Succesfully but the startup page does not match expected page...")
