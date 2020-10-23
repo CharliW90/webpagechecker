@@ -95,9 +95,8 @@ if not startupPageContent == divclassexpectation:
 
 while not (startupPageContent == divclassexpectation):
     print("...startup page does not match expected page.")
-    time.sleep(570)
     print("Rechecking startup page and expected page...")
-    time.sleep(30)
+    time.sleep(600)
     startupPageContent = str(shop)
 else:
     print("Startup Page Content matches expected page.  App deployed.")
