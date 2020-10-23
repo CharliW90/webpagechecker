@@ -64,6 +64,7 @@ url = os.environ.get("page_tocheck")
 divclass = os.environ.get("divclass_tocheck")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
+accountLoginURL = str(url + "/account/login")
 
 def hash_fetch():
     global response
@@ -89,6 +90,11 @@ hashes = 0
 errorcount = 0
 readfail = 0
 readsuccess = 0
+
+# account login
+with Session() as s:
+    accountLogin = s.get(accountLoginURL)
+    print(accountLogin)
 
 # begin loop to check page for changes
 while True:
@@ -121,7 +127,7 @@ while True:
             header = prefix + logdate
             bodystring = str(shop)
             if str(shop) == defaultPageContent:
-                print ("Page returned to empty.  Resuming monitoring.")
+                print("Page returned to empty.  Resuming monitoring.")
                 continue
             else:
                 print(header)
