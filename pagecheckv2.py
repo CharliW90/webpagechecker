@@ -102,5 +102,5 @@ while True:
             time.sleep(30)
             continue
         print("Checking again...")
-    except Exception as e:
+    except e:
         print(e)
