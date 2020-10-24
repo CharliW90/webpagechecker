@@ -79,24 +79,4 @@ def page_fetch():
     snapshot = str(shop)
     return snapshot
 
-def page_check():
-    try:
-        if page_fetch():
-            return True
-        else:
-            return False
-    except:
-        return False
-
-while True:
-    try:
-        if page_check():
-            print("Page Found")
-            print(snapshot)
-            time.sleep(30)
-            continue
-        else:
-            print("Page Not Found")
-            time.sleep(30)
-            continue
-        print("Checking again...")
+print(page_fetch())
