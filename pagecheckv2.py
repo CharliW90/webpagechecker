@@ -67,6 +67,7 @@ url = baseurl + pageurl
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
 accountLoginURL = str(baseurl + "/account/login")
+attempts = 0
 
 def page_fetch():
     global response
@@ -79,18 +80,16 @@ def page_fetch():
     snapshot = str(shop)
     return snapshot
 
-test = page_fetch()
-print(test)
-
-#while True:
-#    try:
-#        if page_fetch() == "None":
-#            print("Page Not Fetched")
-#        else:
-#            print("Page Fetched")
-#            print(snapshot)
-#        time.sleep(30)
-#        continue
-#    except Exception as e:
-#        print(e)
-#        time.sleep(300)
+while True:
+    try:
+        page_fetch()
+        print("Page Found!")
+        time.sleep(120)
+        continue
+    except Exception as e:
+        if e.code == 404:
+            attempts += 1
+            if attempts >= 120:
+                print("120 unsuccessful attempts. Continuing...")
+                attempts = 0
+            time.sleep(30)
