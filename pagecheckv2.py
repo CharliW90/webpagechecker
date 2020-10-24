@@ -60,9 +60,9 @@ def sms_ping(message):
                            body="Webpage Checker Ping! " + message)
 
 # prepare variables
-baseurl = str("https://www.yorkghostmerchants.com")
-pageurl = str("/shop/p/original-york-ghost-the-all-hallows-phantom")
-#pageurl = str("/shop/p/original-york-ghost-the-penny-dreadful")
+baseurl = os.environ.get("page_tocheck")
+pageurl = os.environ.get("item_tocheck")
+divclass = os.environ.get("divclass_tocheck")
 url = baseurl + pageurl
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
@@ -74,19 +74,17 @@ def page_fetch():
     global page
     page = BeautifulSoup(response, 'html.parser')
     global shop
-    shop = page.find('div', {"class": "ProductItem-summary"})
+    shop = page.find('div', {"class": divclass})
     global snapshot
     snapshot = str(shop)
     return snapshot
 
 while True:
     try:
-        test = page_fetch()
-        if test:
-            print("Page Fetched")
-            print(snapshot)
-        else:
+        if page_fetch() = "None":
             print("Page Not Fetched")
+        else:
+            print("Page Fetched")
             print(snapshot)
         time.sleep(30)
         continue
