@@ -89,7 +89,7 @@ startupPageContent = str(shop)
 if not startupPageContent == divclassexpectation:
     print("App Deployed Succesfully but the startup page does not match expected page...")
     time.sleep(570)
-    print("Rechecking startup page and expected page..."
+    print("Rechecking startup page and expected page...")
     newHash = hash_fetch()
     time.sleep(30)
     startupPageContent = str(shop)
