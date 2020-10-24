@@ -83,8 +83,12 @@ def page_fetch():
 while True:
     try:
         page_fetch()
+        successful = str("Webpage for Henry Ghost Found!  ")
+        quick_link = str(url)
+        success_message = successful + quick_link
+        sms_ping(success_message)
         print("Page Found!")
-        time.sleep(120)
+        time.sleep(300)
         continue
     except Exception as e:
         if e.code == 404:
@@ -93,3 +97,7 @@ while True:
                 print("120 unsuccessful attempts. Continuing...")
                 attempts = 0
             time.sleep(30)
+        else:
+            print(e)
+            time.sleep(30)
+        continue
