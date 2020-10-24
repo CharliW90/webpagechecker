@@ -104,7 +104,7 @@ while True:
         email_body = str(shop)
         email_ping(email_header, email_body)
         print(url + " - Page Found!")
-        time.sleep(300)
+        time.sleep(1800)
         continue
     except Exception as e:
         if e.code == 404:
