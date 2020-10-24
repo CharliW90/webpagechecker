@@ -81,7 +81,7 @@ def page_fetch():
 
 while True:
     try:
-        if page_fetch() = "None":
+        if page_fetch() == "None":
             print("Page Not Fetched")
         else:
             print("Page Fetched")
