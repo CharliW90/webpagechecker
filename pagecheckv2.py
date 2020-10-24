@@ -79,4 +79,12 @@ def page_fetch():
     snapshot = str(shop)
     return snapshot
 
-print(page_fetch())
+while True:
+    try:
+        test = page_fetch()
+        if test:
+            print("Page Fetched")
+        else:
+            print("Page Not Fetched")
+        time.sleep(30)
+        continue
