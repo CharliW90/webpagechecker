@@ -91,6 +91,10 @@ def page_fetch():
 
 while True:
     try:
+        if not test_conn_open(server):
+            logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
+            print("smtp client closed.  reconnecting." + logdate)
+            open_conn()
         page_fetch()
         successful = str("Webpage for Henry Ghost Found!")
         quick_link = str(url)
