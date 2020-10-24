@@ -81,13 +81,11 @@ def page_fetch():
 
 def page_check():
     try:
-        page_fetch()
-        return True
-    except http.client.IncompleteRead:
-        logdate = str((datetime.now() + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))
-        print("Incomplete Read" + logdate)
-        return False
-    except exception:
+        if page_fetch():
+            return True
+        else:
+            return False
+    except:
         return False
 
 while True:
@@ -102,5 +100,3 @@ while True:
             time.sleep(30)
             continue
         print("Checking again...")
-    except e:
-        print(e)
