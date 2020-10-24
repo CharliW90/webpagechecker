@@ -1,1 +1,1 @@
-worker: python pagecheck.py
+worker: python pagecheckv2.py
