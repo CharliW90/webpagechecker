@@ -79,15 +79,18 @@ def page_fetch():
     snapshot = str(shop)
     return snapshot
 
-while True:
-    try:
-        if page_fetch() == "None":
-            print("Page Not Fetched")
-        else:
-            print("Page Fetched")
-            print(snapshot)
-        time.sleep(30)
-        continue
-    except Exception as e:
-        print(e)
-        time.sleep(300)
+test = page_fetch()
+print(test)
+
+#while True:
+#    try:
+#        if page_fetch() == "None":
+#            print("Page Not Fetched")
+#        else:
+#            print("Page Fetched")
+#            print(snapshot)
+#        time.sleep(30)
+#        continue
+#    except Exception as e:
+#        print(e)
+#        time.sleep(300)
