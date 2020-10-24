@@ -61,8 +61,8 @@ def sms_ping(message):
 
 # prepare variables
 baseurl = str("https://www.yorkghostmerchants.com")
-#pageurl = str("/shop/p/original-york-ghost-the-all-hallows-phantom")
-pageurl = str("/shop/p/original-york-ghost-the-penny-dreadful")
+pageurl = str("/shop/p/original-york-ghost-the-all-hallows-phantom")
+#pageurl = str("/shop/p/original-york-ghost-the-penny-dreadful")
 url = baseurl + pageurl
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
