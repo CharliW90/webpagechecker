@@ -94,6 +94,7 @@ while True:
     try:
         if page_check():
             print("Page Found")
+            print(snapshot)
             time.sleep(30)
             continue
         else:
