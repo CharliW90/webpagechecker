@@ -59,6 +59,15 @@ def sms_ping(message):
                            from_=sender_num, 
                            body="Webpage Checker Ping! " + message)
 
+def email_ping(header, message):
+    msg = EmailMessage()
+    msg.set_content(message)
+    msg['From'] = os.environ.get("gmail_send_account")
+    msg['To'] = os.environ.get("gmail_recipient_account")
+    msg['Subject'] = str(header)
+    server.send_message(msg)
+    server.quit()
+
 # prepare variables
 baseurl = os.environ.get("page_tocheck")
 pageurl = os.environ.get("item_tocheck")
@@ -83,11 +92,14 @@ def page_fetch():
 while True:
     try:
         page_fetch()
-        successful = str("Webpage for Henry Ghost Found!  ")
+        successful = str("Webpage for Henry Ghost Found!")
         quick_link = str(url)
-        success_message = successful + quick_link
+        success_message = successful + " " + quick_link
         sms_ping(success_message)
-        print("Page Found!")
+        email_header = successful
+        email_body = str(shop)
+        email_ping(email_header, email_body)
+        print(url + " - Page Found!")
         time.sleep(300)
         continue
     except Exception as e:
