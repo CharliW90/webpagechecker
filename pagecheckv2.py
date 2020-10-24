@@ -84,8 +84,10 @@ while True:
         test = page_fetch()
         if test:
             print("Page Fetched")
+            print(snapshot)
         else:
             print("Page Not Fetched")
+            print(snapshot)
         time.sleep(30)
         continue
     except Exception as e:
