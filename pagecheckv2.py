@@ -88,3 +88,5 @@ while True:
             print("Page Not Fetched")
         time.sleep(30)
         continue
+    except Exception as e:
+        print(e)
