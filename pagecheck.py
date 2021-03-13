@@ -65,7 +65,6 @@ divclass = os.environ.get("divclass_tocheck")
 divclassexpectation = os.environ.get("expected_result")
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 request = Request(url, headers=headers)
-accountLoginURL = str(url + os.environ.get("account_login_suffix"))
 
 def hash_fetch():
     global response
