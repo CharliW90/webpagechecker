@@ -96,7 +96,7 @@ while True:
             print("smtp client closed.  reconnecting." + logdate)
             open_conn()
         page_fetch()
-        successful = str("Webpage for Henry Ghost Found!")
+        successful = str("Webpage found!")
         quick_link = str(url)
         success_message = successful + " " + quick_link
         sms_ping(success_message)
