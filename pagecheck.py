@@ -114,13 +114,6 @@ else:
     readfail = 0
     readsuccess = 0
 
-    # account login
-    with Session() as s:
-        accountLoginPage = s.get(accountLoginURL)
-        print(accountLoginPage)
-        accountLoginUsername = os.environ.get("gmail_recipient_account")
-        accountLoginPass = os.environ.get("account_login_password")
-
     # begin loop to check page for changes
     while True:
 
