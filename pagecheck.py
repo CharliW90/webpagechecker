@@ -50,7 +50,7 @@ else:
 # prepare twilio connection
 Twilio_Account_SID = os.environ.get("Twilio_Account_SID") 
 Twilio_Auth_Token = os.environ.get("Twilio_Auth_Token")
-recipient_num = os.environ.get("recipients_mobile_number")
+recipient_num = os.environ.get("recipients_mobile_number")    # this must be registered as a friendly number on Twilio
 sender_num = os.environ.get("twilio_mobile_number")
 
 def sms_ping(message):
